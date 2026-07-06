@@ -60,6 +60,7 @@
             <article
               class="cart-card"
               data-cart-item
+              data-product-id="self"
               data-price-usd="13"
               data-price-cny="88"
             >
@@ -107,6 +108,7 @@
             <article
               class="cart-card"
               data-cart-item
+              data-product-id="assist"
               data-price-usd="39"
               data-price-cny="269"
             >
@@ -170,6 +172,20 @@
                 <strong data-total-usd>$52</strong>
                 <small data-total-cny>人民币 ¥357</small>
               </div>
+            </div>
+            <div class="payment-methods" aria-label="选择支付方式">
+              <label>
+                <input type="radio" name="payment_method" value="alipay" checked />
+                <span>支付宝</span>
+              </label>
+              <label>
+                <input type="radio" name="payment_method" value="wechat" />
+                <span>微信支付</span>
+              </label>
+              <label>
+                <input type="radio" name="payment_method" value="usdt" />
+                <span>USDT</span>
+              </label>
             </div>
             <button class="checkout-button" type="button" id="checkout">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">

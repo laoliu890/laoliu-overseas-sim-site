@@ -480,6 +480,38 @@ button {
   line-height: 1;
 }
 
+.payment-methods {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.payment-methods label {
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgba(99, 14, 212, 0.12);
+  border-radius: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  font-weight: 800;
+  gap: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-methods label:has(input:checked) {
+  border-color: rgba(99, 14, 212, 0.42);
+  box-shadow: 0 10px 24px rgba(99, 14, 212, 0.08);
+}
+
+.payment-methods input {
+  accent-color: var(--brand);
+  height: 16px;
+  width: 16px;
+}
+
 .checkout-button {
   align-items: center;
   background: var(--brand);
@@ -495,6 +527,11 @@ button {
   padding: 16px 24px;
   transition: 0.25s ease;
   width: 100%;
+}
+
+.checkout-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .checkout-button:active {

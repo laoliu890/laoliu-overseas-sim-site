@@ -17,6 +17,51 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
 }
 
+function getCartItems() {
+  return [...document.querySelectorAll("[data-cart-item]")].map((item) => ({
+    id: item.dataset.productId,
+    quantity: Number(item.querySelector("[data-qty]").textContent),
+  }));
+}
+
+async function createPayment() {
+  const checkoutButton = document.querySelector("#checkout");
+  const method = document.querySelector('input[name="payment_method"]:checked')?.value;
+  const items = getCartItems().filter((item) => item.quantity > 0);
+
+  if (!items.length) {
+    showToast("请先选择至少一件商品。");
+    return;
+  }
+
+  checkoutButton.disabled = true;
+  checkoutButton.dataset.loading = "true";
+  checkoutButton.lastChild.textContent = " 正在创建订单";
+
+  try {
+    const response = await fetch("/api/create-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ method, items }),
+    });
+    const result = await response.json();
+
+    if (!response.ok || !result.paymentUrl) {
+      throw new Error(result.message || "支付通道暂未配置完成。");
+    }
+
+    window.location.href = result.paymentUrl;
+  } catch (error) {
+    showToast(error.message || "创建支付订单失败，请稍后再试。");
+  } finally {
+    checkoutButton.disabled = false;
+    checkoutButton.dataset.loading = "false";
+    checkoutButton.lastChild.textContent = " 去结算";
+  }
+}
+
 function updateCart() {
   const items = [...document.querySelectorAll("[data-cart-item]")];
   let subtotalUsd = 0;
@@ -91,7 +136,7 @@ document.addEventListener("click", (event) => {
   }
 
   if (checkout) {
-    showToast("请联系老六确认订单与付款方式。");
+    createPayment();
   }
 });
 
