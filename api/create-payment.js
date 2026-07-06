@@ -3,11 +3,11 @@ const crypto = require("crypto");
 const products = {
   self: {
     name: "giffgaff 自助卡",
-    priceCny: 88,
+    priceCny: 68,
   },
   assist: {
     name: "giffgaff 省心卡",
-    priceCny: 269,
+    priceCny: 160,
   },
 };
 
