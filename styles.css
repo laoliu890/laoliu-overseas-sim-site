@@ -1456,11 +1456,233 @@ button {
   }
 
   .home-hero {
-    padding: 56px 0;
+    padding: 36px 0 40px;
+  }
+
+  .hero-grid {
+    gap: 22px;
+  }
+
+  .hero-copy h1 {
+    font-size: 34px;
+    letter-spacing: -0.02em;
+    line-height: 1.14;
+    max-width: 360px;
+  }
+
+  .hero-lead {
+    gap: 5px;
+    font-size: 14px;
+    line-height: 1.58;
+    margin-top: 14px;
+  }
+
+  .hero-features {
+    gap: 9px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 20px;
+  }
+
+  .hero-features div {
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(99, 14, 212, 0.08);
+    border-radius: 999px;
+    font-size: 12px;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .hero-features span {
+    font-size: 10px;
+    height: 17px;
+    width: 17px;
+  }
+
+  .sim-visual {
+    min-height: auto;
+  }
+
+  .sim-image-card {
+    margin: 0 auto;
+    border-radius: 18px;
+    box-shadow: 0 16px 38px rgba(38, 18, 84, 0.1);
+    padding: 8px;
+    transform: rotate(-0.8deg);
+    width: min(300px, 92%);
+  }
+
+  .sim-image-card img {
+    border-radius: 13px;
   }
 
   .home-section {
-    padding: 60px 0;
+    padding: 48px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 26px;
+  }
+
+  .section-heading h2 {
+    font-size: 28px;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  .section-heading.centered {
+    text-align: left;
+  }
+
+  .section-heading.centered p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+
+  .section-heading.centered p:first-child {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    margin-bottom: 7px;
+  }
+
+  .product-grid {
+    gap: 14px;
+  }
+
+  .product-card {
+    border-radius: 16px;
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .product-card.featured {
+    box-shadow: 0 16px 34px rgba(99, 14, 212, 0.08);
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+
+  .product-badge {
+    font-size: 11px;
+    margin-bottom: 9px;
+  }
+
+  .product-card h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .product-card p {
+    font-size: 13px;
+    line-height: 1.55;
+    min-height: 0;
+  }
+
+  .product-card ul {
+    gap: 9px;
+    margin: 18px 0 22px;
+  }
+
+  .product-card li {
+    font-size: 13px;
+    gap: 8px;
+    line-height: 1.35;
+  }
+
+  .product-bottom {
+    align-items: center;
+    border-top: 1px solid rgba(204, 195, 216, 0.26);
+    gap: 12px;
+    padding-top: 16px;
+  }
+
+  .product-bottom strong {
+    font-size: 36px;
+  }
+
+  .product-bottom small {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .product-bottom a {
+    border-radius: 10px;
+    font-size: 13px;
+    padding: 11px 14px;
+  }
+
+  .process-section {
+    background: #fbf9ff;
+  }
+
+  .process-grid {
+    gap: 10px;
+  }
+
+  .process-grid div {
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid rgba(99, 14, 212, 0.08);
+    border-radius: 14px;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    padding: 14px;
+    text-align: left;
+  }
+
+  .process-grid h3,
+  .process-grid p {
+    grid-column: 2;
+  }
+
+  .process-grid span {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    border-radius: 12px;
+    font-size: 12px;
+    height: 34px;
+    margin: 0;
+    width: 34px;
+  }
+
+  .process-grid h3 {
+    font-size: 16px;
+    margin: 0 0 4px;
+  }
+
+  .process-grid p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .faq-section {
+    border-radius: 0 0 24px 24px;
+  }
+
+  .faq-list {
+    gap: 10px;
+  }
+
+  .faq-list details {
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .faq-list summary {
+    font-size: 16px;
+    line-height: 1.35;
+    padding-right: 28px;
+  }
+
+  .faq-list summary::after {
+    font-size: 20px;
+  }
+
+  .faq-list p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 12px;
   }
 
   .cart-layout {
@@ -1730,15 +1952,46 @@ button {
     width: 14px;
   }
 
-  .footer-grid,
-  .footer-bottom {
-    grid-template-columns: 1fr;
+  .site-footer {
+    padding: 42px 0;
+  }
+
+  .footer-grid {
+    gap: 24px 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 34px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-logo {
+    font-size: 18px;
+  }
+
+  .footer-brand p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+
+  .footer-grid h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .footer-grid a {
+    font-size: 13px;
+    margin-top: 10px;
   }
 
   .footer-bottom {
     align-items: flex-start;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
+    grid-template-columns: 1fr;
+    padding-top: 22px;
   }
 }
 
