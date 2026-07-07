@@ -1,9 +1,27 @@
 const { defaultFaqs, defaultProducts } = require("./_defaults");
 
 function getConfig() {
-  const url = process.env.SUPABASE_URL;
+  const url = normalizeSupabaseUrl(process.env.SUPABASE_URL);
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  return { configured: Boolean(url && key), key, url: url ? url.replace(/\/$/, "") : "" };
+  return { configured: Boolean(url && key), key, url };
+}
+
+function normalizeSupabaseUrl(value) {
+  const raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  if (!raw) {
+    return "";
+  }
+
+  try {
+    const url = new URL(raw);
+    if (url.hostname.endsWith(".supabase.co")) {
+      return `${url.protocol}//${url.hostname}`;
+    }
+  } catch (error) {
+    return raw.replace(/\/rest\/v1\/?$/i, "").replace(/\/$/, "");
+  }
+
+  return raw.replace(/\/rest\/v1\/?$/i, "").replace(/\/$/, "");
 }
 
 function headers(extra = {}) {
