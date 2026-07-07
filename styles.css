@@ -1398,16 +1398,34 @@ button {
   .page-shell,
   .footer-shell,
   .home-shell {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .nav-shell {
-    height: 72px;
+    height: 64px;
   }
 
   .brand {
-    font-size: 21px;
+    font-size: 18px;
+    gap: 7px;
+  }
+
+  .laoliu-mark {
+    border-radius: 9px;
+    font-size: 15px;
+    height: 34px;
+    width: 34px;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .icon-link,
+  .user-button {
+    height: 36px;
+    width: 36px;
   }
 
   .order-button {
@@ -1419,7 +1437,22 @@ button {
   }
 
   .page-shell {
-    padding-top: 48px;
+    padding-bottom: 44px;
+    padding-top: 28px;
+  }
+
+  .page-title {
+    margin-bottom: 22px;
+  }
+
+  .page-title p {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .page-title h1 {
+    font-size: 34px;
+    letter-spacing: -0.025em;
   }
 
   .home-hero {
@@ -1430,33 +1463,271 @@ button {
     padding: 60px 0;
   }
 
+  .cart-layout {
+    gap: 14px;
+  }
+
+  .cart-list {
+    gap: 12px;
+  }
+
   .cart-card {
     align-items: stretch;
+    border-radius: 12px;
     flex-direction: column;
+    gap: 13px;
+    padding: 15px;
+  }
+
+  .cart-card:hover {
+    transform: none;
+  }
+
+  .product-copy {
+    gap: 11px;
+  }
+
+  .product-icon {
+    border-radius: 9px;
+    flex-basis: 40px;
+    height: 40px;
+    width: 40px;
+  }
+
+  .product-icon .icon {
+    height: 21px;
+    width: 21px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+
+  .product-copy h2 {
+    font-size: 19px;
+    margin-bottom: 3px;
+  }
+
+  .product-copy p {
+    font-size: 13px;
+    line-height: 1.45;
   }
 
   .product-tools {
-    justify-content: space-between;
+    border-top: 1px solid rgba(204, 195, 216, 0.28);
+    gap: 10px;
+    justify-content: flex-start;
+    padding-top: 12px;
     width: 100%;
+  }
+
+  .quantity {
+    border-radius: 9px;
+    padding: 3px;
+  }
+
+  .quantity button {
+    height: 30px;
+    width: 30px;
+  }
+
+  .quantity span:not(.material) {
+    font-size: 16px;
+    min-width: 30px;
+  }
+
+  .price {
+    margin-left: auto;
+    min-width: 70px;
+  }
+
+  .price strong {
+    font-size: 24px;
+  }
+
+  .price small {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .delete-button {
+    height: 34px;
+    width: 34px;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .summary-card h2 {
+    font-size: 21px;
+    margin-bottom: 12px;
+  }
+
+  .summary-lines {
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .summary-lines span {
+    font-size: 14px;
+  }
+
+  .summary-lines strong {
+    font-size: 16px;
+  }
+
+  .total-row {
+    margin-bottom: 12px;
+  }
+
+  .total-row > span {
+    font-size: 18px;
+  }
+
+  .total-row strong {
+    font-size: 34px;
+  }
+
+  .checkout-note {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+  }
+
+  .checkout-note strong {
+    font-size: 13px;
+  }
+
+  .checkout-note span {
+    display: none;
+  }
+
+  .checkout-button {
+    border-radius: 11px;
+    font-size: 15px;
+    padding: 14px 18px;
+  }
+
+  .continue-link {
+    margin-top: 8px;
+    padding: 5px;
   }
 
   .checkout-modal {
     align-items: end;
-    padding: 12px;
+    padding: 0;
   }
 
   .checkout-dialog {
-    border-radius: 16px 16px 0 0;
-    max-height: calc(100vh - 24px);
-    padding: 22px 18px;
+    border-radius: 18px 18px 0 0;
+    max-height: 88dvh;
+    padding: 18px 16px;
+    width: 100%;
+  }
+
+  .checkout-dialog-header {
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .checkout-dialog-header p {
+    font-size: 10px;
+    margin-bottom: 5px;
   }
 
   .checkout-dialog-header h2 {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .modal-close {
+    height: 36px;
+    width: 36px;
+  }
+
+  .checkout-modal-grid {
+    gap: 14px;
+  }
+
+  .shipping-form {
+    gap: 10px;
+  }
+
+  .summary-section-title h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .summary-section-title p {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .shipping-form label {
+    gap: 5px;
+  }
+
+  .shipping-form span {
+    font-size: 12px;
+  }
+
+  .shipping-form input,
+  .shipping-form textarea {
+    border-radius: 9px;
+    font-size: 13px;
+    padding: 10px 11px;
+  }
+
+  .shipping-form textarea {
+    min-height: 62px;
   }
 
   .shipping-grid {
     grid-template-columns: 1fr;
+  }
+
+  .checkout-side {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .mini-total {
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 13px;
+    padding-bottom: 13px;
+  }
+
+  .mini-total strong {
+    font-size: 28px;
+    margin: 0;
+  }
+
+  .mini-total small {
+    text-align: right;
+  }
+
+  .payment-methods {
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 12px;
+  }
+
+  .payment-methods label {
+    border-radius: 10px;
+    font-size: 13px;
+    gap: 7px;
+    justify-content: center;
+    padding: 10px 8px;
+  }
+
+  .payment-methods input {
+    height: 14px;
+    width: 14px;
   }
 
   .footer-grid,
@@ -1476,15 +1747,25 @@ button {
     display: none;
   }
 
+  .brand {
+    font-size: 17px;
+  }
+
   .product-tools {
-    gap: 12px;
+    gap: 8px;
   }
 
   .price {
-    min-width: 72px;
+    min-width: 64px;
   }
 
   .price strong {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .payment-methods label {
+    font-size: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
