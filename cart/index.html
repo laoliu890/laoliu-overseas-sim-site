@@ -173,62 +173,16 @@
                 <small data-total-cny>人民币 ¥228</small>
               </div>
             </div>
-            <form class="shipping-form" aria-label="收货信息">
-              <div class="summary-section-title">
-                <h3>收货信息</h3>
-                <p>用于寄出实体 SIM 卡，请填写真实可联系的信息。</p>
-              </div>
-              <label>
-                <span>收件人</span>
-                <input name="receiverName" autocomplete="name" placeholder="请输入姓名" required />
-              </label>
-              <label>
-                <span>手机号码</span>
-                <input name="receiverPhone" autocomplete="tel" inputmode="tel" placeholder="快递联系电话" required />
-              </label>
-              <label>
-                <span>微信号</span>
-                <input name="wechat" autocomplete="off" placeholder="用于激活协助和订单沟通" />
-              </label>
-              <div class="shipping-grid">
-                <label>
-                  <span>省份</span>
-                  <input name="province" autocomplete="address-level1" placeholder="省/自治区/直辖市" required />
-                </label>
-                <label>
-                  <span>城市</span>
-                  <input name="city" autocomplete="address-level2" placeholder="城市" required />
-                </label>
-              </div>
-              <label>
-                <span>详细地址</span>
-                <textarea name="address" autocomplete="street-address" rows="3" placeholder="区县、街道、小区、门牌号" required></textarea>
-              </label>
-              <label>
-                <span>订单备注</span>
-                <textarea name="note" rows="2" placeholder="可填写备用电话、发货要求或激活时间"></textarea>
-              </label>
-            </form>
-            <div class="payment-methods" aria-label="选择支付方式">
-              <label>
-                <input type="radio" name="payment_method" value="alipay" checked />
-                <span>支付宝</span>
-              </label>
-              <label>
-                <input type="radio" name="payment_method" value="wechat" />
-                <span>微信支付</span>
-              </label>
-              <label>
-                <input type="radio" name="payment_method" value="usdt" />
-                <span>USDT</span>
-              </label>
+            <div class="checkout-note">
+              <strong>下一步填写收货信息</strong>
+              <span>确认收件地址和支付方式后跳转付款。</span>
             </div>
             <button class="checkout-button" type="button" id="checkout">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                 <rect x="5" y="11" width="14" height="10" rx="2"></rect>
                 <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
               </svg>
-              去结算
+              填写收货信息并支付
             </button>
             <a class="continue-link" href="/#products">
               <svg class="icon small-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -237,6 +191,95 @@
               继续逛
             </a>
           </aside>
+        </div>
+
+        <div class="checkout-modal" data-checkout-modal aria-hidden="true">
+          <button class="checkout-backdrop" type="button" data-close-checkout aria-label="关闭结算窗口"></button>
+          <section class="checkout-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+            <div class="checkout-dialog-header">
+              <div>
+                <p>Checkout</p>
+                <h2 id="checkout-title">确认收货信息</h2>
+              </div>
+              <button class="modal-close" type="button" data-close-checkout aria-label="关闭">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+
+            <form class="checkout-form" aria-label="结算信息" novalidate>
+              <div class="checkout-modal-grid">
+                <div class="shipping-form" aria-label="收货信息">
+                  <div class="summary-section-title">
+                    <h3>收货信息</h3>
+                    <p>用于寄出实体 SIM 卡，请填写真实可联系的信息。</p>
+                  </div>
+                  <div class="shipping-grid">
+                    <label>
+                      <span>收件人</span>
+                      <input name="receiverName" autocomplete="name" placeholder="请输入姓名" required />
+                    </label>
+                    <label>
+                      <span>手机号码</span>
+                      <input name="receiverPhone" autocomplete="tel" inputmode="tel" placeholder="快递联系电话" required />
+                    </label>
+                  </div>
+                  <label>
+                    <span>微信号</span>
+                    <input name="wechat" autocomplete="off" placeholder="用于激活协助和订单沟通" />
+                  </label>
+                  <div class="shipping-grid">
+                    <label>
+                      <span>省份</span>
+                      <input name="province" autocomplete="address-level1" placeholder="省/自治区/直辖市" required />
+                    </label>
+                    <label>
+                      <span>城市</span>
+                      <input name="city" autocomplete="address-level2" placeholder="城市" required />
+                    </label>
+                  </div>
+                  <label>
+                    <span>详细地址</span>
+                    <textarea name="address" autocomplete="street-address" rows="3" placeholder="区县、街道、小区、门牌号" required></textarea>
+                  </label>
+                  <label>
+                    <span>订单备注</span>
+                    <textarea name="note" rows="2" placeholder="可填写备用电话、发货要求或激活时间"></textarea>
+                  </label>
+                </div>
+
+                <div class="checkout-side">
+                  <div class="mini-total">
+                    <span>应付合计</span>
+                    <strong data-modal-total-usd>$34</strong>
+                    <small data-modal-total-cny>人民币 ¥228</small>
+                  </div>
+                  <div class="payment-methods" aria-label="选择支付方式">
+                    <label>
+                      <input type="radio" name="payment_method" value="alipay" checked />
+                      <span>支付宝</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="payment_method" value="wechat" />
+                      <span>微信支付</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="payment_method" value="usdt" />
+                      <span>USDT</span>
+                    </label>
+                  </div>
+                  <button class="checkout-button" type="submit" id="confirm-checkout">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                      <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+                    </svg>
+                    <span data-checkout-label>确认并支付</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
         </div>
       </section>
     </main>

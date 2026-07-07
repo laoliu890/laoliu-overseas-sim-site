@@ -25,7 +25,7 @@ function getCartItems() {
 }
 
 function getShippingInfo() {
-  const form = document.querySelector(".shipping-form");
+  const form = document.querySelector(".checkout-form");
   if (!form) {
     return null;
   }
@@ -68,8 +68,31 @@ function validateShippingInfo(info) {
   return "";
 }
 
+function openCheckout() {
+  const items = getCartItems().filter((item) => item.quantity > 0);
+
+  if (!items.length) {
+    showToast("请先选择至少一件商品。");
+    return;
+  }
+
+  const modal = document.querySelector("[data-checkout-modal]");
+  modal?.classList.add("open");
+  modal?.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  setTimeout(() => document.querySelector('.checkout-form input[name="receiverName"]')?.focus(), 80);
+}
+
+function closeCheckout() {
+  const modal = document.querySelector("[data-checkout-modal]");
+  modal?.classList.remove("open");
+  modal?.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
 async function createPayment() {
-  const checkoutButton = document.querySelector("#checkout");
+  const checkoutButton = document.querySelector("#confirm-checkout");
+  const checkoutLabel = checkoutButton?.querySelector("[data-checkout-label]");
   const method = document.querySelector('input[name="payment_method"]:checked')?.value;
   const items = getCartItems().filter((item) => item.quantity > 0);
   const shipping = getShippingInfo();
@@ -82,13 +105,13 @@ async function createPayment() {
 
   if (shippingError) {
     showToast(shippingError);
-    document.querySelector(".shipping-form input:invalid, .shipping-form textarea:invalid")?.focus();
+    document.querySelector(".checkout-form input:invalid, .checkout-form textarea:invalid")?.focus();
     return;
   }
 
   checkoutButton.disabled = true;
   checkoutButton.dataset.loading = "true";
-  checkoutButton.lastChild.textContent = " 正在创建订单";
+  checkoutLabel.textContent = "正在创建订单";
 
   try {
     const response = await fetch("/api/create-payment", {
@@ -110,7 +133,7 @@ async function createPayment() {
   } finally {
     checkoutButton.disabled = false;
     checkoutButton.dataset.loading = "false";
-    checkoutButton.lastChild.textContent = " 去结算";
+    checkoutLabel.textContent = "确认并支付";
   }
 }
 
@@ -139,6 +162,8 @@ function updateCart() {
   document.querySelector("[data-subtotal-usd]").textContent = formatUsd(subtotalUsd);
   document.querySelector("[data-total-usd]").textContent = formatUsd(subtotalUsd);
   document.querySelector("[data-total-cny]").textContent = formatCny(subtotalCny);
+  document.querySelector("[data-modal-total-usd]").textContent = formatUsd(subtotalUsd);
+  document.querySelector("[data-modal-total-cny]").textContent = formatCny(subtotalCny);
   document.querySelector("[data-cart-count]").textContent = count;
 
   if (!items.length) {
@@ -168,6 +193,7 @@ document.addEventListener("click", (event) => {
   const decrease = event.target.closest("[data-decrease]");
   const remove = event.target.closest("[data-remove]");
   const checkout = event.target.closest("#checkout");
+  const closeModal = event.target.closest("[data-close-checkout]");
 
   if (increase || decrease) {
     const item = event.target.closest("[data-cart-item]");
@@ -188,14 +214,24 @@ document.addEventListener("click", (event) => {
   }
 
   if (checkout) {
-    createPayment();
+    openCheckout();
+  }
+
+  if (closeModal) {
+    closeCheckout();
   }
 });
 
 document.addEventListener("submit", (event) => {
-  if (event.target.matches(".shipping-form")) {
+  if (event.target.matches(".checkout-form")) {
     event.preventDefault();
     createPayment();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeCheckout();
   }
 });
 
