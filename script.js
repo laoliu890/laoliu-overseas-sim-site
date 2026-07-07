@@ -24,13 +24,65 @@ function getCartItems() {
   }));
 }
 
+function getShippingInfo() {
+  const form = document.querySelector(".shipping-form");
+  if (!form) {
+    return null;
+  }
+
+  const data = new FormData(form);
+  return {
+    receiverName: String(data.get("receiverName") || "").trim(),
+    receiverPhone: String(data.get("receiverPhone") || "").trim(),
+    wechat: String(data.get("wechat") || "").trim(),
+    province: String(data.get("province") || "").trim(),
+    city: String(data.get("city") || "").trim(),
+    address: String(data.get("address") || "").trim(),
+    note: String(data.get("note") || "").trim(),
+  };
+}
+
+function validateShippingInfo(info) {
+  const requiredFields = [
+    ["receiverName", "请填写收件人姓名。"],
+    ["receiverPhone", "请填写收货手机号。"],
+    ["province", "请填写收货省份。"],
+    ["city", "请填写收货城市。"],
+    ["address", "请填写详细收货地址。"],
+  ];
+
+  for (const [field, message] of requiredFields) {
+    if (!info?.[field]) {
+      return message;
+    }
+  }
+
+  if (!/^1[3-9]\d{9}$/.test(info.receiverPhone.replace(/\s+/g, ""))) {
+    return "请填写正确的 11 位中国大陆手机号。";
+  }
+
+  if (info.address.length < 8) {
+    return "详细地址太短，请补充区县、街道和门牌号。";
+  }
+
+  return "";
+}
+
 async function createPayment() {
   const checkoutButton = document.querySelector("#checkout");
   const method = document.querySelector('input[name="payment_method"]:checked')?.value;
   const items = getCartItems().filter((item) => item.quantity > 0);
+  const shipping = getShippingInfo();
+  const shippingError = validateShippingInfo(shipping);
 
   if (!items.length) {
     showToast("请先选择至少一件商品。");
+    return;
+  }
+
+  if (shippingError) {
+    showToast(shippingError);
+    document.querySelector(".shipping-form input:invalid, .shipping-form textarea:invalid")?.focus();
     return;
   }
 
@@ -44,7 +96,7 @@ async function createPayment() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ method, items }),
+      body: JSON.stringify({ method, items, shipping }),
     });
     const result = await response.json();
 
@@ -136,6 +188,13 @@ document.addEventListener("click", (event) => {
   }
 
   if (checkout) {
+    createPayment();
+  }
+});
+
+document.addEventListener("submit", (event) => {
+  if (event.target.matches(".shipping-form")) {
+    event.preventDefault();
     createPayment();
   }
 });

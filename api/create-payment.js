@@ -38,6 +38,45 @@ function normalizeGateway(value) {
   return gateway.endsWith("/") ? gateway : `${gateway}/`;
 }
 
+function cleanText(value, maxLength = 120) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function normalizeShippingInfo(value) {
+  return {
+    receiverName: cleanText(value?.receiverName, 32),
+    receiverPhone: cleanText(value?.receiverPhone, 24).replace(/\s+/g, ""),
+    wechat: cleanText(value?.wechat, 64),
+    province: cleanText(value?.province, 32),
+    city: cleanText(value?.city, 32),
+    address: cleanText(value?.address, 180),
+    note: cleanText(value?.note, 180),
+  };
+}
+
+function validateShippingInfo(info) {
+  if (!info.receiverName) {
+    return "请填写收件人姓名。";
+  }
+
+  if (!/^1[3-9]\d{9}$/.test(info.receiverPhone)) {
+    return "请填写正确的 11 位中国大陆手机号。";
+  }
+
+  if (!info.province || !info.city) {
+    return "请填写完整的省份和城市。";
+  }
+
+  if (info.address.length < 8) {
+    return "请填写详细收货地址。";
+  }
+
+  return "";
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -66,9 +105,18 @@ module.exports = async function handler(req, res) {
   const method = payload?.method;
   const channel = channelMap[method];
   const items = Array.isArray(payload?.items) ? payload.items : [];
+  const shipping = normalizeShippingInfo(payload?.shipping);
+  const shippingError = validateShippingInfo(shipping);
 
   if (!channel) {
     return sendJson(res, 400, { error: "invalid_payment_method" });
+  }
+
+  if (shippingError) {
+    return sendJson(res, 400, {
+      error: "invalid_shipping_info",
+      message: shippingError,
+    });
   }
 
   let totalCny = 0;
@@ -114,6 +162,7 @@ module.exports = async function handler(req, res) {
   return sendJson(res, 200, {
     orderNo: outTradeNo,
     amountCny: totalCny,
+    shipping,
     paymentUrl: `${gateway}submit.php?${query.toString()}`,
   });
 };

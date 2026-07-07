@@ -173,6 +173,42 @@
                 <small data-total-cny>人民币 ¥228</small>
               </div>
             </div>
+            <form class="shipping-form" aria-label="收货信息">
+              <div class="summary-section-title">
+                <h3>收货信息</h3>
+                <p>用于寄出实体 SIM 卡，请填写真实可联系的信息。</p>
+              </div>
+              <label>
+                <span>收件人</span>
+                <input name="receiverName" autocomplete="name" placeholder="请输入姓名" required />
+              </label>
+              <label>
+                <span>手机号码</span>
+                <input name="receiverPhone" autocomplete="tel" inputmode="tel" placeholder="快递联系电话" required />
+              </label>
+              <label>
+                <span>微信号</span>
+                <input name="wechat" autocomplete="off" placeholder="用于激活协助和订单沟通" />
+              </label>
+              <div class="shipping-grid">
+                <label>
+                  <span>省份</span>
+                  <input name="province" autocomplete="address-level1" placeholder="省/自治区/直辖市" required />
+                </label>
+                <label>
+                  <span>城市</span>
+                  <input name="city" autocomplete="address-level2" placeholder="城市" required />
+                </label>
+              </div>
+              <label>
+                <span>详细地址</span>
+                <textarea name="address" autocomplete="street-address" rows="3" placeholder="区县、街道、小区、门牌号" required></textarea>
+              </label>
+              <label>
+                <span>订单备注</span>
+                <textarea name="note" rows="2" placeholder="可填写备用电话、发货要求或激活时间"></textarea>
+              </label>
+            </form>
             <div class="payment-methods" aria-label="选择支付方式">
               <label>
                 <input type="radio" name="payment_method" value="alipay" checked />

@@ -480,6 +480,81 @@ button {
   line-height: 1;
 }
 
+.shipping-form {
+  border-top: 1px solid rgba(204, 195, 216, 0.3);
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding-top: 22px;
+}
+
+.summary-section-title {
+  margin-bottom: 2px;
+}
+
+.summary-section-title h3 {
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0 0 6px;
+}
+
+.summary-section-title p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.shipping-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.shipping-form span {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.shipping-form input,
+.shipping-form textarea {
+  appearance: none;
+  background: #fff;
+  border: 1px solid rgba(99, 14, 212, 0.14);
+  border-radius: 10px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  padding: 12px 13px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.shipping-form textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+.shipping-form input:focus,
+.shipping-form textarea:focus {
+  border-color: rgba(99, 14, 212, 0.46);
+  box-shadow: 0 0 0 4px rgba(99, 14, 212, 0.08);
+}
+
+.shipping-form input::placeholder,
+.shipping-form textarea::placeholder {
+  color: rgba(74, 68, 85, 0.48);
+}
+
+.shipping-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .payment-methods {
   display: grid;
   gap: 10px;
@@ -1212,6 +1287,10 @@ button {
   .product-tools {
     justify-content: space-between;
     width: 100%;
+  }
+
+  .shipping-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-grid,
