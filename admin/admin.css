@@ -383,6 +383,136 @@ th {
   padding: 20px 22px 24px;
 }
 
+.product-console {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.4fr);
+  min-height: 620px;
+}
+
+.catalog-pane {
+  background: #fcfbff;
+  border-right: 1px solid var(--line);
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.catalog-toolbar {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 150px;
+  padding: 18px;
+}
+
+.catalog-toolbar label {
+  font-size: 12px;
+}
+
+.catalog-summary {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 18px 14px;
+}
+
+.product-table {
+  display: grid;
+  max-height: 650px;
+  overflow: auto;
+}
+
+.product-row {
+  background: transparent;
+  border-bottom: 1px solid #f0edf6;
+  border-radius: 0;
+  color: var(--ink);
+  display: grid;
+  gap: 8px;
+  justify-content: stretch;
+  min-height: auto;
+  padding: 16px 18px;
+  text-align: left;
+}
+
+.product-row:hover,
+.product-row.active {
+  background: #f4efff;
+}
+
+.product-row-main {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.product-row-title {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.product-row-title strong,
+.product-row-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-row-title span,
+.product-row-meta {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.product-row-meta {
+  display: flex;
+  gap: 12px;
+}
+
+.status-active,
+.status-inactive {
+  border-radius: 999px;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 850;
+  padding: 4px 9px;
+}
+
+.status-active {
+  background: #e6f8f1;
+  color: var(--success);
+}
+
+.status-inactive {
+  background: #f2f4f7;
+  color: #667085;
+}
+
+.product-editor-list {
+  align-content: start;
+  background: #fff;
+  padding: 22px;
+}
+
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.danger-button {
+  background: #fff;
+  border: 1px solid #f4b8b2;
+  color: var(--danger);
+}
+
+.danger-button:hover {
+  background: #fff1f0;
+  color: var(--danger);
+}
+
 .editor-card {
   gap: 16px;
   padding: 18px;
@@ -454,8 +584,19 @@ th {
   }
 
   .stat-grid,
-  .form-grid {
+  .form-grid,
+  .product-console,
+  .catalog-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-pane {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .product-table {
+    max-height: 380px;
   }
 
   .workspace {

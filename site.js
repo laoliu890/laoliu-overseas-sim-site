@@ -12,20 +12,34 @@ function formatMoney(value, prefix) {
   return `${prefix}${Number.isInteger(number) ? number : number.toFixed(2)}`;
 }
 
-function renderProduct(product) {
-  const card = document.querySelector(`[data-home-product="${CSS.escape(product.id)}"]`);
-  if (!card) {
+function renderProducts(products) {
+  const grid = document.querySelector(".product-grid");
+  const activeProducts = Array.isArray(products) ? products.filter((product) => product.active !== false) : [];
+  if (!grid || !activeProducts.length) {
     return;
   }
 
-  const features = Array.isArray(product.features) ? product.features : [];
-  card.querySelector("[data-product-badge]").textContent = product.badge || "";
-  card.querySelector("[data-product-name]").textContent = product.name || "";
-  card.querySelector("[data-product-description]").textContent = product.description || "";
-  card.querySelector("[data-product-usd]").textContent = formatMoney(product.price_usd, "$");
-  card.querySelector("[data-product-cny]").textContent = formatMoney(product.price_cny, "人民币 ¥");
-  card.querySelector("[data-product-features]").innerHTML = features
-    .map((feature) => `<li>${escapeHtml(feature)}</li>`)
+  grid.innerHTML = activeProducts
+    .map((product, index) => {
+      const features = Array.isArray(product.features) ? product.features : [];
+      return `
+        <article class="product-card ${index === 0 ? "featured" : ""}" data-home-product="${escapeHtml(product.id)}">
+          <span class="product-badge">${escapeHtml(product.badge || "推荐产品")}</span>
+          <h3>${escapeHtml(product.name || "未命名商品")}</h3>
+          <p>${escapeHtml(product.description || "")}</p>
+          <ul>
+            ${features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
+          </ul>
+          <div class="product-bottom">
+            <div>
+              <strong>${formatMoney(product.price_usd, "$")}</strong>
+              <small>${formatMoney(product.price_cny, "人民币 ¥")}</small>
+            </div>
+            <a href="/cart/?product=${encodeURIComponent(product.id)}">加入购物车</a>
+          </div>
+        </article>
+      `;
+    })
     .join("");
 }
 
@@ -55,7 +69,7 @@ async function loadSiteData() {
       return;
     }
     const data = await response.json();
-    (data.products || []).forEach(renderProduct);
+    renderProducts(data.products || []);
     renderFaqs(data.faqs || []);
   } catch (error) {
     // Keep the static fallback content if the API is unavailable.

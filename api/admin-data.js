@@ -102,7 +102,19 @@ module.exports = async function handler(req, res) {
 
     if (payload.action === "save_products") {
       const products = (Array.isArray(payload.products) ? payload.products : []).map(normalizeProduct);
-      if (products.some((item) => !item.id || !item.name || !item.price_cny || !item.price_usd)) {
+      const ids = products.map((item) => item.id);
+      const invalidProduct = products.some((item) => {
+        const hasBadIdentity = !item.id || !item.name;
+        const hasBadPrice =
+          !Number.isFinite(item.price_cny) ||
+          !Number.isFinite(item.price_usd) ||
+          item.price_cny < 0 ||
+          item.price_usd < 0;
+        const activeWithoutPrice = item.active !== false && (!item.price_cny || !item.price_usd);
+        return hasBadIdentity || hasBadPrice || activeWithoutPrice;
+      });
+      const hasDuplicateId = new Set(ids).size !== ids.length;
+      if (invalidProduct || hasDuplicateId) {
         return sendJson(res, 400, { error: "invalid_products" });
       }
       await upsertRows("products", products, "id");

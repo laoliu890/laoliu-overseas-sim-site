@@ -111,11 +111,34 @@
               <div class="panel-heading">
                 <div>
                   <p class="eyebrow">Products</p>
-                  <h2>商品管理</h2>
+                  <h2>商品目录</h2>
                 </div>
-                <button type="button" data-save-products>保存商品</button>
+                <div class="button-row">
+                  <button class="ghost-button" type="button" data-add-product>新增商品</button>
+                  <button type="button" data-save-products>保存全部</button>
+                </div>
               </div>
-              <div class="editor-list" data-product-editor></div>
+              <div class="product-console">
+                <div class="catalog-pane">
+                  <div class="catalog-toolbar">
+                    <label>
+                      <span>搜索商品</span>
+                      <input data-product-search placeholder="按名称、ID、标签搜索" />
+                    </label>
+                    <label>
+                      <span>状态</span>
+                      <select data-product-status-filter>
+                        <option value="all">全部商品</option>
+                        <option value="active">仅上架</option>
+                        <option value="inactive">仅下架</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="catalog-summary" data-product-summary>0 个商品</div>
+                  <div class="product-table" data-product-table></div>
+                </div>
+                <div class="editor-list product-editor-list" data-product-editor></div>
+              </div>
             </div>
           </section>
 

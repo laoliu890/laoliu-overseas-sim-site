@@ -2,6 +2,15 @@ const itemsRoot = document.querySelector(".cart-list");
 const toast = document.querySelector("[data-toast]");
 let toastTimer;
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function formatUsd(value) {
   const number = Number(value || 0);
   return `$${Number.isInteger(number) ? number : number.toFixed(2)}`;
@@ -190,24 +199,71 @@ function updateCart() {
   }
 }
 
-function applyProductData(products) {
-  if (!Array.isArray(products)) {
+function productIconSvg() {
+  return `
+    <svg class="icon filled-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 2h7l5 5v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"></path>
+      <path d="M14 2v5h5"></path>
+      <path d="M8.5 15h7M8.5 18h4"></path>
+    </svg>
+  `;
+}
+
+function renderCartProducts(products) {
+  const activeProducts = Array.isArray(products) ? products.filter((product) => product.active !== false) : [];
+  if (!itemsRoot || !activeProducts.length) {
     return;
   }
 
-  products.forEach((product) => {
-    const item = document.querySelector(`[data-cart-item][data-product-id="${CSS.escape(product.id)}"]`);
-    if (!item) {
-      return;
-    }
+  const selectedProductId = new URLSearchParams(window.location.search).get("product");
+  itemsRoot.innerHTML = activeProducts
+    .map((product, index) => {
+      const quantity = selectedProductId ? (product.id === selectedProductId ? 1 : 0) : index < 2 ? 1 : 0;
+      return `
+        <article
+          class="cart-card"
+          data-cart-item
+          data-product-id="${escapeHtml(product.id)}"
+          data-price-usd="${escapeHtml(product.price_usd || 0)}"
+          data-price-cny="${escapeHtml(product.price_cny || 0)}"
+        >
+          <div class="product-copy">
+            <div class="product-icon">${productIconSvg()}</div>
+            <div>
+              <span class="eyebrow">${escapeHtml(product.badge || "商品")}</span>
+              <h2>${escapeHtml(product.name || "未命名商品")}</h2>
+              <p>${escapeHtml(product.description || "")}</p>
+            </div>
+          </div>
 
-    item.dataset.priceUsd = String(product.price_usd || 0);
-    item.dataset.priceCny = String(product.price_cny || 0);
-    item.querySelector(".eyebrow").textContent = product.badge || "";
-    item.querySelector("h2").textContent = product.name || "";
-    item.querySelector(".product-copy p").textContent = product.description || "";
-    item.querySelector("[data-remove]").setAttribute("aria-label", `移除 ${product.name || "商品"}`);
-  });
+          <div class="product-tools">
+            <div class="quantity" aria-label="数量">
+              <button type="button" data-decrease aria-label="减少数量">
+                <svg class="icon small-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <span data-qty>${quantity}</span>
+              <button type="button" data-increase aria-label="增加数量">
+                <svg class="icon small-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="price">
+              <strong data-line-usd>$0</strong>
+              <small data-line-cny>人民币 ¥0</small>
+            </div>
+            <button class="delete-button" type="button" data-remove aria-label="移除 ${escapeHtml(product.name || "商品")}">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 async function initCart() {
@@ -215,7 +271,7 @@ async function initCart() {
     const response = await fetch("/api/site-data/", { cache: "no-store" });
     if (response.ok) {
       const data = await response.json();
-      applyProductData(data.products || []);
+      renderCartProducts(data.products || []);
     }
   } catch (error) {
     // Use the static cart defaults if the site data API is unavailable.
