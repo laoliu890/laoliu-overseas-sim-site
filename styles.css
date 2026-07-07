@@ -1441,6 +1441,10 @@ button {
     padding-top: 28px;
   }
 
+  .cart-page .page-shell {
+    padding-bottom: 112px;
+  }
+
   .page-title {
     margin-bottom: 22px;
   }
@@ -1686,19 +1690,19 @@ button {
   }
 
   .cart-layout {
-    gap: 14px;
+    gap: 12px;
   }
 
   .cart-list {
-    gap: 12px;
+    gap: 10px;
   }
 
   .cart-card {
     align-items: stretch;
     border-radius: 12px;
     flex-direction: column;
-    gap: 13px;
-    padding: 15px;
+    gap: 10px;
+    padding: 13px;
   }
 
   .cart-card:hover {
@@ -1706,19 +1710,19 @@ button {
   }
 
   .product-copy {
-    gap: 11px;
+    gap: 10px;
   }
 
   .product-icon {
     border-radius: 9px;
-    flex-basis: 40px;
-    height: 40px;
-    width: 40px;
+    flex-basis: 36px;
+    height: 36px;
+    width: 36px;
   }
 
   .product-icon .icon {
-    height: 21px;
-    width: 21px;
+    height: 19px;
+    width: 19px;
   }
 
   .eyebrow {
@@ -1728,20 +1732,20 @@ button {
   }
 
   .product-copy h2 {
-    font-size: 19px;
+    font-size: 18px;
     margin-bottom: 3px;
   }
 
   .product-copy p {
-    font-size: 13px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.42;
   }
 
   .product-tools {
     border-top: 1px solid rgba(204, 195, 216, 0.28);
-    gap: 10px;
+    gap: 8px;
     justify-content: flex-start;
-    padding-top: 12px;
+    padding-top: 10px;
     width: 100%;
   }
 
@@ -1780,63 +1784,75 @@ button {
   }
 
   .summary-card {
-    border-radius: 12px;
-    padding: 16px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 18px 18px 0 0;
+    bottom: 0;
+    box-shadow: 0 -16px 44px rgba(24, 16, 44, 0.12);
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    left: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    position: fixed;
+    right: 0;
+    z-index: 18;
   }
 
   .summary-card h2 {
-    font-size: 21px;
-    margin-bottom: 12px;
-  }
-
-  .summary-lines {
-    gap: 8px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-  }
-
-  .summary-lines span {
-    font-size: 14px;
-  }
-
-  .summary-lines strong {
-    font-size: 16px;
-  }
-
-  .total-row {
-    margin-bottom: 12px;
-  }
-
-  .total-row > span {
-    font-size: 18px;
-  }
-
-  .total-row strong {
-    font-size: 34px;
-  }
-
-  .checkout-note {
-    margin-bottom: 12px;
-    padding: 10px 12px;
-  }
-
-  .checkout-note strong {
-    font-size: 13px;
-  }
-
-  .checkout-note span {
     display: none;
   }
 
-  .checkout-button {
+  .summary-lines {
+    display: none;
+  }
+
+  .total-row {
+    align-items: flex-start;
+    display: grid;
+    gap: 3px;
+    justify-content: start;
+    margin: 0;
+  }
+
+  .total-row > span {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .total-row div {
+    text-align: left;
+  }
+
+  .total-row strong {
+    font-size: 28px;
+  }
+
+  .checkout-note {
+    display: none;
+  }
+
+  .summary-card .checkout-button {
     border-radius: 11px;
+    font-size: 0;
+    min-width: 118px;
+    padding: 13px 16px;
+    white-space: nowrap;
+    width: auto;
+  }
+
+  .summary-card .checkout-button::after {
+    content: "去支付";
     font-size: 15px;
-    padding: 14px 18px;
+  }
+
+  .summary-card .checkout-button .icon {
+    display: none;
   }
 
   .continue-link {
-    margin-top: 8px;
-    padding: 5px;
+    display: none;
   }
 
   .checkout-modal {
