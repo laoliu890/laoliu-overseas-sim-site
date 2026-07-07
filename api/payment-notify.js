@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const { getConfig, patchRows } = require("./_supabase");
 
 function sendText(res, status, text) {
   res.statusCode = status;
@@ -28,7 +29,13 @@ module.exports = async function handler(req, res) {
   const actual = String(params?.sign || "").toLowerCase();
 
   if (actual && expected === actual) {
-    // TODO: 接入数据库或订单系统后，在这里把订单状态标记为已支付。
+    if (getConfig().configured && params?.out_trade_no) {
+      await patchRows("orders", `order_no=eq.${encodeURIComponent(params.out_trade_no)}`, {
+        payment_status: "paid",
+        paid_at: new Date().toISOString(),
+        raw_notify: params,
+      });
+    }
     return sendText(res, 200, "success");
   }
 

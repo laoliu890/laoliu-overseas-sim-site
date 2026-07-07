@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>老六海外手机号 · 管理后台</title>
+    <link rel="stylesheet" href="./admin.css" />
+    <script defer src="./admin.js"></script>
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="login-panel" data-login-panel>
+        <div class="login-card">
+          <a class="brand" href="/">
+            <span class="brand-mark">6</span>
+            <span>老六海外手机号</span>
+          </a>
+          <div>
+            <p class="eyebrow">Admin Console</p>
+            <h1>网站管理后台</h1>
+            <p class="login-copy">登录后可以修改前台商品、常见问题，并查看用户订单和收货信息。</p>
+          </div>
+          <form class="login-form" data-login-form>
+            <label>
+              <span>后台密码</span>
+              <input name="password" type="password" autocomplete="current-password" placeholder="请输入后台密码" required />
+            </label>
+            <button type="submit">登录后台</button>
+          </form>
+          <p class="form-message" data-login-message></p>
+        </div>
+      </section>
+
+      <section class="admin-app" data-admin-app hidden>
+        <aside class="sidebar">
+          <a class="brand" href="/">
+            <span class="brand-mark">6</span>
+            <span>老六海外手机号</span>
+          </a>
+          <nav class="side-nav" aria-label="后台导航">
+            <button class="active" type="button" data-tab-button="overview">总览</button>
+            <button type="button" data-tab-button="products">商品管理</button>
+            <button type="button" data-tab-button="faqs">FAQ 管理</button>
+            <button type="button" data-tab-button="orders">订单管理</button>
+          </nav>
+          <button class="ghost-button" type="button" data-logout>退出登录</button>
+        </aside>
+
+        <div class="workspace">
+          <header class="topbar">
+            <div>
+              <p class="eyebrow">globalsimhelp.com</p>
+              <h1>管理中心</h1>
+            </div>
+            <div class="top-actions">
+              <a href="/" target="_blank" rel="noreferrer">打开前台</a>
+              <button type="button" data-refresh>刷新数据</button>
+            </div>
+          </header>
+
+          <p class="notice" data-notice hidden></p>
+
+          <section class="tab-panel active" data-tab-panel="overview">
+            <div class="stat-grid">
+              <div class="stat-card">
+                <span>总订单</span>
+                <strong data-stat="totalOrders">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>已支付</span>
+                <strong data-stat="paidOrders">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>待处理</span>
+                <strong data-stat="pendingOrders">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>已收款</span>
+                <strong data-stat="revenueCny">¥0</strong>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Recent Orders</p>
+                  <h2>最新订单</h2>
+                </div>
+                <button type="button" data-jump-tab="orders">查看全部</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>订单号</th>
+                      <th>商品</th>
+                      <th>金额</th>
+                      <th>状态</th>
+                      <th>收件人</th>
+                      <th>时间</th>
+                    </tr>
+                  </thead>
+                  <tbody data-recent-orders></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-tab-panel="products">
+            <div class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Products</p>
+                  <h2>商品管理</h2>
+                </div>
+                <button type="button" data-save-products>保存商品</button>
+              </div>
+              <div class="editor-list" data-product-editor></div>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-tab-panel="faqs">
+            <div class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">FAQ</p>
+                  <h2>常见问题管理</h2>
+                </div>
+                <div class="button-row">
+                  <button type="button" data-add-faq>新增问题</button>
+                  <button type="button" data-save-faqs>保存 FAQ</button>
+                </div>
+              </div>
+              <div class="editor-list" data-faq-editor></div>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-tab-panel="orders">
+            <div class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Orders</p>
+                  <h2>订单管理</h2>
+                </div>
+                <button type="button" data-refresh>刷新订单</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>订单号</th>
+                      <th>商品</th>
+                      <th>金额</th>
+                      <th>支付</th>
+                      <th>收件信息</th>
+                      <th>状态操作</th>
+                    </tr>
+                  </thead>
+                  <tbody data-orders></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

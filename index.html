@@ -9,6 +9,7 @@
       content="英国 giffgaff 预付费实体 SIM 卡，适合旅行、留学、商务通信与海外平台注册。"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./site.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -72,32 +73,32 @@
           </div>
 
           <div class="product-grid">
-            <article class="product-card featured">
-              <span class="product-badge">自行激活充值，附中文教程</span>
-              <h3>giffgaff 自助卡</h3>
-              <p>适合愿意跟着教程自己完成激活和充值的用户。</p>
-              <ul>
+            <article class="product-card featured" data-home-product="self">
+              <span class="product-badge" data-product-badge>自行激活充值，附中文教程</span>
+              <h3 data-product-name>giffgaff 自助卡</h3>
+              <p data-product-description>适合愿意跟着教程自己完成激活和充值的用户。</p>
+              <ul data-product-features>
                 <li>英国 giffgaff 实体 SIM 卡</li>
                 <li>附中文激活与充值教程</li>
                 <li>国内仓库发货，物流可查</li>
               </ul>
               <div class="product-bottom">
-                <div><strong>$10</strong><small>人民币 ¥68</small></div>
+                <div><strong data-product-usd>$10</strong><small data-product-cny>人民币 ¥68</small></div>
                 <a href="/cart/">加入购物车</a>
               </div>
             </article>
 
-            <article class="product-card">
-              <span class="product-badge">客服一对一协助激活充值</span>
-              <h3>giffgaff 省心卡</h3>
-              <p>适合不想自己研究教程，希望有人协助完成激活充值的用户。</p>
-              <ul>
+            <article class="product-card" data-home-product="assist">
+              <span class="product-badge" data-product-badge>客服一对一协助激活充值</span>
+              <h3 data-product-name>giffgaff 省心卡</h3>
+              <p data-product-description>适合不想自己研究教程，希望有人协助完成激活充值的用户。</p>
+              <ul data-product-features>
                 <li>英国 giffgaff 实体 SIM 卡</li>
                 <li>客服一对一协助激活充值</li>
                 <li>售后优先响应</li>
               </ul>
               <div class="product-bottom">
-                <div><strong>$24</strong><small>人民币 ¥160</small></div>
+                <div><strong data-product-usd>$24</strong><small data-product-cny>人民币 ¥160</small></div>
                 <a href="/cart/">加入购物车</a>
               </div>
             </article>
@@ -125,7 +126,7 @@
             <p>FAQ</p>
             <h2>常见问题</h2>
           </div>
-          <div class="faq-list">
+          <div class="faq-list" data-faq-list>
             <details open>
               <summary>这张卡适合哪些人？</summary>
               <p>适合赴英旅行、英国留学、商务通信、欧洲短期出行，或希望提前准备英国号码的用户。如果只是临时上网且不需要英国号码，也可以对比 eSIM 或当地流量卡。</p>

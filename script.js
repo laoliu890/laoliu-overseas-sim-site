@@ -3,11 +3,13 @@ const toast = document.querySelector("[data-toast]");
 let toastTimer;
 
 function formatUsd(value) {
-  return `$${value}`;
+  const number = Number(value || 0);
+  return `$${Number.isInteger(number) ? number : number.toFixed(2)}`;
 }
 
 function formatCny(value) {
-  return `人民币 ¥${value}`;
+  const number = Number(value || 0);
+  return `人民币 ¥${Number.isInteger(number) ? number : number.toFixed(2)}`;
 }
 
 function showToast(message) {
@@ -114,7 +116,7 @@ async function createPayment() {
   checkoutLabel.textContent = "正在创建订单";
 
   try {
-    const response = await fetch("/api/create-payment", {
+    const response = await fetch("/api/create-payment/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -188,6 +190,40 @@ function updateCart() {
   }
 }
 
+function applyProductData(products) {
+  if (!Array.isArray(products)) {
+    return;
+  }
+
+  products.forEach((product) => {
+    const item = document.querySelector(`[data-cart-item][data-product-id="${CSS.escape(product.id)}"]`);
+    if (!item) {
+      return;
+    }
+
+    item.dataset.priceUsd = String(product.price_usd || 0);
+    item.dataset.priceCny = String(product.price_cny || 0);
+    item.querySelector(".eyebrow").textContent = product.badge || "";
+    item.querySelector("h2").textContent = product.name || "";
+    item.querySelector(".product-copy p").textContent = product.description || "";
+    item.querySelector("[data-remove]").setAttribute("aria-label", `移除 ${product.name || "商品"}`);
+  });
+}
+
+async function initCart() {
+  try {
+    const response = await fetch("/api/site-data/", { cache: "no-store" });
+    if (response.ok) {
+      const data = await response.json();
+      applyProductData(data.products || []);
+    }
+  } catch (error) {
+    // Use the static cart defaults if the site data API is unavailable.
+  }
+
+  updateCart();
+}
+
 document.addEventListener("click", (event) => {
   const increase = event.target.closest("[data-increase]");
   const decrease = event.target.closest("[data-decrease]");
@@ -235,4 +271,4 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-updateCart();
+initCart();

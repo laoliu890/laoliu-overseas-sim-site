@@ -1,15 +1,5 @@
 const crypto = require("crypto");
-
-const products = {
-  self: {
-    name: "giffgaff 自助卡",
-    priceCny: 68,
-  },
-  assist: {
-    name: "giffgaff 省心卡",
-    priceCny: 160,
-  },
-};
+const { getConfig, getSiteData, insertRows } = require("./_supabase");
 
 const channelMap = {
   alipay: "alipay",
@@ -121,6 +111,11 @@ module.exports = async function handler(req, res) {
 
   let totalCny = 0;
   const orderItems = [];
+  const siteData = await getSiteData();
+  const products = siteData.products.reduce((map, product) => {
+    map[product.id] = product;
+    return map;
+  }, {});
 
   for (const item of items) {
     const product = products[item.id];
@@ -131,8 +126,14 @@ module.exports = async function handler(req, res) {
     }
 
     if (quantity > 0) {
-      totalCny += product.priceCny * quantity;
-      orderItems.push(`${product.name}x${quantity}`);
+      const priceCny = Number(product.price_cny);
+      totalCny += priceCny * quantity;
+      orderItems.push({
+        productId: product.id,
+        productName: product.name,
+        quantity,
+        priceCny,
+      });
     }
   }
 
@@ -145,12 +146,41 @@ module.exports = async function handler(req, res) {
     pid: merchantId,
     type: channel,
     out_trade_no: outTradeNo,
-    notify_url: `${siteUrl}/api/payment-notify`,
+    notify_url: `${siteUrl}/api/payment-notify/`,
     return_url: `${siteUrl}/cart/?paid=1&order=${encodeURIComponent(outTradeNo)}`,
-    name: orderItems.join(" / "),
+    name: orderItems.map((item) => `${item.productName}x${item.quantity}`).join(" / "),
     money: totalCny.toFixed(2),
     sitename: "老六海外手机号",
   };
+
+  if (getConfig().configured) {
+    await insertRows("orders", [
+      {
+        order_no: outTradeNo,
+        payment_method: method,
+        payment_status: "pending",
+        amount_cny: totalCny,
+        receiver_name: shipping.receiverName,
+        receiver_phone: shipping.receiverPhone,
+        wechat: shipping.wechat,
+        province: shipping.province,
+        city: shipping.city,
+        address: shipping.address,
+        note: shipping.note,
+      },
+    ]);
+
+    await insertRows(
+      "order_items",
+      orderItems.map((item) => ({
+        order_no: outTradeNo,
+        product_id: item.productId,
+        product_name: item.productName,
+        quantity: item.quantity,
+        price_cny: item.priceCny,
+      })),
+    );
+  }
 
   const sign = buildSign(params, merchantKey);
   const query = new URLSearchParams({

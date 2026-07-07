@@ -1,6 +1,6 @@
 .vercel
 .DS_Store
-admin
-admin/**
+.env
+.env.local
 assets/giffgaff-hero.png
 assets/giffgaff-street.png
