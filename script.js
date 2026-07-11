@@ -140,7 +140,7 @@ async function createPayment() {
 
     window.location.href = result.paymentUrl;
   } catch (error) {
-    showToast(error.message || "创建支付订单失败，请稍后再试。");
+    showToast(error.message || "创建支付订单失败，请留下微信或 QQ，客服会主动联系你。");
   } finally {
     checkoutButton.disabled = false;
     checkoutButton.dataset.loading = "false";
@@ -191,7 +191,7 @@ function updateCart() {
           <div>
             <span class="eyebrow">Cart empty</span>
             <h2>购物车暂无商品</h2>
-            <p>你可以继续选择套餐，或联系老六确认订单与付款方式。</p>
+            <p>你可以继续选择套餐；下单时留下微信或 QQ，客服会主动联系你确认订单。</p>
           </div>
         </div>
       </article>

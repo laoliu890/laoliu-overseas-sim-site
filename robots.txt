@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /cart/
+
+Sitemap: https://globalsimhelp.com/sitemap.xml
