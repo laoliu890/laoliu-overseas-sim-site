@@ -91,4 +91,29 @@ document.addEventListener("click", (event) => {
   }
 });
 
+const floatingContact = document.querySelector(".floating-contact");
+if (floatingContact) {
+  let scrollFadeTimer;
+
+  const updateFloatingContactScrollState = () => {
+    if (!window.matchMedia("(max-width: 720px)").matches || floatingContact.open) {
+      floatingContact.classList.remove("is-scrolling");
+      return;
+    }
+
+    floatingContact.classList.add("is-scrolling");
+    window.clearTimeout(scrollFadeTimer);
+    scrollFadeTimer = window.setTimeout(() => {
+      floatingContact.classList.remove("is-scrolling");
+    }, 420);
+  };
+
+  window.addEventListener("scroll", updateFloatingContactScrollState, { passive: true });
+  floatingContact.addEventListener("toggle", () => {
+    if (floatingContact.open) {
+      floatingContact.classList.remove("is-scrolling");
+    }
+  });
+}
+
 loadSiteData();
