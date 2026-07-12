@@ -76,4 +76,19 @@ async function loadSiteData() {
   }
 }
 
+document.addEventListener("click", (event) => {
+  const closeButton = event.target.closest("[data-floating-contact-close]");
+  if (!closeButton) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const floatingContact = closeButton.closest(".floating-contact");
+  if (floatingContact) {
+    floatingContact.removeAttribute("open");
+  }
+});
+
 loadSiteData();

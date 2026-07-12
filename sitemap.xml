@@ -7,16 +7,28 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://globalsimhelp.com/giffgaff-sim-card/</loc>
-    <lastmod>2026-07-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://globalsimhelp.com/guides/giffgaff-activation/</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://globalsimhelp.com/guides/giffgaff-guide/</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://globalsimhelp.com/guides/giffgaff-keep-number/</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://globalsimhelp.com/guides/uk-sim-vs-esim/</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://globalsimhelp.com/tutorials/</loc>
@@ -39,6 +51,12 @@
   <url>
     <loc>https://globalsimhelp.com/contact/</loc>
     <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://globalsimhelp.com/orders/</loc>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

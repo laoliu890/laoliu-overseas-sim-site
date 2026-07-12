@@ -2,6 +2,27 @@ const itemsRoot = document.querySelector(".cart-list");
 const toast = document.querySelector("[data-toast]");
 let toastTimer;
 
+const fallbackProducts = [
+  {
+    id: "self",
+    name: "giffgaff 自助卡",
+    badge: "自行激活充值，附中文教程",
+    description: "适合愿意跟着教程自己完成激活和充值的用户。",
+    price_usd: 10,
+    price_cny: 68,
+    active: true,
+  },
+  {
+    id: "assist",
+    name: "giffgaff 省心卡",
+    badge: "客服一对一协助激活充值",
+    description: "适合不想自己研究教程，希望有人协助完成激活充值的用户。",
+    price_usd: 24,
+    price_cny: 160,
+    active: true,
+  },
+];
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -175,11 +196,19 @@ function updateCart() {
   document.querySelector("[data-total-cny]").textContent = formatCny(subtotalCny);
   document.querySelector("[data-modal-total-usd]").textContent = formatUsd(subtotalUsd);
   document.querySelector("[data-modal-total-cny]").textContent = formatCny(subtotalCny);
-  document.querySelector("[data-cart-count]").textContent = count;
+  const cartCount = document.querySelector("[data-cart-count]");
+  cartCount.textContent = count;
+  cartCount.setAttribute("data-cart-count", String(count));
+  document.querySelectorAll("[data-cart-has-items]").forEach((node) => {
+    node.hidden = count <= 0;
+  });
+  document.querySelectorAll("[data-cart-empty-only]").forEach((node) => {
+    node.hidden = count > 0;
+  });
 
   if (!items.length) {
     itemsRoot.innerHTML = `
-      <article class="cart-card">
+      <article class="cart-card empty-cart-card">
         <div class="product-copy">
           <div class="product-icon">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -191,7 +220,8 @@ function updateCart() {
           <div>
             <span class="eyebrow">Cart empty</span>
             <h2>购物车暂无商品</h2>
-            <p>你可以继续选择套餐；下单时留下微信或 QQ，客服会主动联系你确认订单。</p>
+            <p>你可以先选择自助卡或省心卡。只有点击产品页的购买按钮后，商品才会加入购物车。</p>
+            <a class="empty-cart-link" href="/#products">返回产品区选卡</a>
           </div>
         </div>
       </article>
@@ -211,14 +241,22 @@ function productIconSvg() {
 
 function renderCartProducts(products) {
   const activeProducts = Array.isArray(products) ? products.filter((product) => product.active !== false) : [];
-  if (!itemsRoot || !activeProducts.length) {
+  if (!itemsRoot) {
     return;
   }
 
   const selectedProductId = new URLSearchParams(window.location.search).get("product");
-  itemsRoot.innerHTML = activeProducts
+  const selectedProducts = selectedProductId
+    ? activeProducts.filter((product) => product.id === selectedProductId)
+    : [];
+
+  if (!selectedProducts.length) {
+    itemsRoot.innerHTML = "";
+    return;
+  }
+
+  itemsRoot.innerHTML = selectedProducts
     .map((product, index) => {
-      const quantity = selectedProductId ? (product.id === selectedProductId ? 1 : 0) : index < 2 ? 1 : 0;
       return `
         <article
           class="cart-card"
@@ -243,7 +281,7 @@ function renderCartProducts(products) {
                   <path d="M5 12h14"></path>
                 </svg>
               </button>
-              <span data-qty>${quantity}</span>
+              <span data-qty>1</span>
               <button type="button" data-increase aria-label="增加数量">
                 <svg class="icon small-icon" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 5v14M5 12h14"></path>
@@ -267,16 +305,19 @@ function renderCartProducts(products) {
 }
 
 async function initCart() {
+  let products = fallbackProducts;
+
   try {
     const response = await fetch("/api/site-data/", { cache: "no-store" });
     if (response.ok) {
       const data = await response.json();
-      renderCartProducts(data.products || []);
+      products = data.products || fallbackProducts;
     }
   } catch (error) {
-    // Use the static cart defaults if the site data API is unavailable.
+    // Static fallback keeps product links working in local static previews.
   }
 
+  renderCartProducts(products);
   updateCart();
 }
 
