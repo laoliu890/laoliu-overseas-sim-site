@@ -2200,6 +2200,298 @@ button {
   min-height: calc(100vh - 80px);
 }
 
+.order-lookup-page {
+  background: #fbf9ff;
+  min-height: calc(100vh - 80px);
+}
+
+.order-lookup-hero {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(99, 14, 212, 0.1), transparent 28%),
+    linear-gradient(180deg, #fff 0%, #fbf9ff 100%);
+  border-bottom: 1px solid #f0edf8;
+  padding: 58px 0;
+}
+
+.order-lookup-grid {
+  align-items: center;
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(0, 1fr) 420px;
+}
+
+.order-lookup-hero h1 {
+  color: var(--ink);
+  font-size: clamp(42px, 6vw, 68px);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  margin: 0 0 22px;
+}
+
+.order-lookup-hero p:not(.policy-kicker) {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.8;
+  margin: 0;
+  max-width: 680px;
+}
+
+.order-lookup-card {
+  background: #fff;
+  border: 1px solid rgba(99, 14, 212, 0.12);
+  border-radius: 26px;
+  box-shadow: 0 24px 70px rgba(24, 16, 44, 0.08);
+  display: grid;
+  gap: 16px;
+  padding: 26px;
+}
+
+.order-lookup-card label {
+  color: var(--ink);
+  display: grid;
+  font-size: 14px;
+  font-weight: 850;
+  gap: 9px;
+}
+
+.order-lookup-card input {
+  border: 1px solid rgba(99, 14, 212, 0.14);
+  border-radius: 14px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 750;
+  min-height: 56px;
+  outline: none;
+  padding: 0 16px;
+}
+
+.order-lookup-card input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(99, 14, 212, 0.1);
+}
+
+.order-lookup-card button {
+  background: var(--brand);
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  min-height: 56px;
+}
+
+.order-lookup-card button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+.order-lookup-card p {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.order-lookup-results-section {
+  padding: 44px 0 78px;
+}
+
+.order-lookup-results {
+  display: grid;
+  gap: 18px;
+}
+
+.order-empty-state,
+.order-support-panel,
+.order-result-card {
+  background: #fff;
+  border: 1px solid rgba(99, 14, 212, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(24, 16, 44, 0.045);
+  padding: 28px;
+}
+
+.order-empty-state h2,
+.order-support-panel h2 {
+  color: var(--ink);
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+}
+
+.order-empty-state p,
+.order-support-panel p {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.order-result-card {
+  display: grid;
+  gap: 18px;
+}
+
+.order-result-head {
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(99, 14, 212, 0.09);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding-bottom: 18px;
+}
+
+.order-result-head span,
+.order-result-grid span,
+.order-items-list > span {
+  color: var(--muted);
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.order-result-head strong {
+  color: var(--ink);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.order-result-head em {
+  background: rgba(99, 14, 212, 0.1);
+  border-radius: 999px;
+  color: var(--brand);
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  padding: 8px 12px;
+}
+
+.order-result-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.order-result-grid div,
+.order-items-list,
+.logistics-box {
+  background: #fbf9ff;
+  border: 1px solid rgba(99, 14, 212, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.order-result-grid strong,
+.order-items-list p,
+.logistics-box dd {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 850;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.order-items-list {
+  display: grid;
+  gap: 5px;
+}
+
+.logistics-box {
+  background: rgba(33, 186, 126, 0.07);
+  border-color: rgba(33, 186, 126, 0.18);
+}
+
+.logistics-box.is-empty {
+  background: #fbf9ff;
+  border-color: rgba(99, 14, 212, 0.08);
+}
+
+.logistics-box h3 {
+  color: var(--ink);
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+
+.logistics-box dl {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 0 14px;
+}
+
+.logistics-box dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  margin-bottom: 4px;
+}
+
+.logistics-box p {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.logistics-image {
+  background: #fff;
+  border: 1px solid rgba(33, 186, 126, 0.18);
+  border-radius: 16px;
+  margin: 16px 0 0;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.logistics-image img {
+  border-radius: 12px;
+  display: block;
+  max-height: 680px;
+  object-fit: contain;
+  width: 100%;
+}
+
+.logistics-image figcaption {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.order-support-panel {
+  align-items: center;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-top: 20px;
+}
+
+.order-support-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.order-support-methods span {
+  background: rgba(99, 14, 212, 0.08);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 12px;
+}
+
+.order-support-methods strong {
+  color: var(--ink);
+}
+
 .activation-hero {
   background:
     linear-gradient(180deg, rgba(245, 240, 255, 0.82) 0%, #fff 100%);
@@ -4419,6 +4711,20 @@ button {
 }
 
 @media (max-width: 1100px) {
+  .order-lookup-grid,
+  .order-support-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .order-result-grid,
+  .logistics-box dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .order-support-methods {
+    justify-content: flex-start;
+  }
+
   .activation-hero-grid,
   .activation-guide-layout,
   .activation-cta-panel {
@@ -4457,6 +4763,54 @@ button {
 }
 
 @media (max-width: 720px) {
+  .order-lookup-hero {
+    padding: 34px 0 36px;
+  }
+
+  .order-lookup-hero h1 {
+    font-size: 42px;
+  }
+
+  .order-lookup-hero p:not(.policy-kicker) {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+
+  .order-lookup-card,
+  .order-empty-state,
+  .order-support-panel,
+  .order-result-card {
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .order-lookup-results-section {
+    padding: 24px 0 52px;
+  }
+
+  .order-result-head {
+    display: grid;
+  }
+
+  .order-result-head strong {
+    font-size: 18px;
+    word-break: break-all;
+  }
+
+  .order-result-head em {
+    justify-self: start;
+  }
+
+  .order-result-grid,
+  .logistics-box dl {
+    grid-template-columns: 1fr;
+  }
+
+  .order-support-methods {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
   .activation-hero {
     padding: 34px 0 38px;
   }

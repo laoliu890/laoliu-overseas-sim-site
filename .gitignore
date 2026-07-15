@@ -2,5 +2,6 @@
 .DS_Store
 .env
 .env.local
+.env*.local
 assets/giffgaff-hero.png
 assets/giffgaff-street.png

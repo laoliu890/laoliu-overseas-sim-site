@@ -14,6 +14,27 @@ function cleanText(value, maxLength = 500) {
     .slice(0, maxLength);
 }
 
+function cleanLogisticsImage(value) {
+  const imageData = String(value || "").trim();
+  if (!imageData) {
+    return "";
+  }
+
+  if (!/^data:image\/(png|jpe?g|webp);base64,[a-z0-9+/=]+$/i.test(imageData)) {
+    const error = new Error("invalid_logistics_image");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (imageData.length > 1_200_000) {
+    const error = new Error("logistics_image_too_large");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return imageData;
+}
+
 function normalizeProduct(item, index) {
   return {
     id: cleanText(item.id, 32),
@@ -43,6 +64,41 @@ function normalizeFaq(item, index) {
   return faq;
 }
 
+function normalizeOrderTracking(payload = {}) {
+  const status = cleanText(payload.logisticsStatus, 32) || "pending";
+  const now = new Date().toISOString();
+  const values = {
+    logistics_status: status,
+    logistics_updated_at: now,
+  };
+
+  if (Object.prototype.hasOwnProperty.call(payload, "logisticsCompany")) {
+    values.logistics_company = cleanText(payload.logisticsCompany, 80);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, "logisticsNo")) {
+    values.logistics_no = cleanText(payload.logisticsNo, 80);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, "logisticsNote")) {
+    values.logistics_note = cleanText(payload.logisticsNote, 500);
+  }
+
+  if (["shipped", "delivered"].includes(status)) {
+    values.shipped_at = now;
+  }
+
+  if (payload.clearLogisticsImage) {
+    values.logistics_image_data = "";
+    values.logistics_image_updated_at = now;
+  } else if (Object.prototype.hasOwnProperty.call(payload, "logisticsImageData") && payload.logisticsImageData) {
+    values.logistics_image_data = cleanLogisticsImage(payload.logisticsImageData);
+    values.logistics_image_updated_at = now;
+  }
+
+  return values;
+}
+
 async function getAdminData() {
   if (!getConfig().configured) {
     throw new Error("supabase_not_configured");
@@ -53,7 +109,7 @@ async function getAdminData() {
     getSiteData(),
     selectRows(
       "orders",
-      "select=id,order_no,payment_method,payment_status,amount_cny,receiver_name,receiver_phone,wechat,province,city,address,note,created_at,paid_at&order=created_at.desc&limit=80",
+      "select=*&order=created_at.desc&limit=80",
     ),
     selectRows("order_items", "select=order_no,product_id,product_name,quantity,price_cny&order=created_at.asc&limit=240"),
   ]);
@@ -74,10 +130,10 @@ async function getAdminData() {
     orders: enrichedOrders,
     stats: {
       totalOrders: orders.length,
-      paidOrders: orders.filter((order) => order.payment_status === "paid").length,
-      pendingOrders: orders.filter((order) => order.payment_status !== "paid").length,
+      paidOrders: orders.filter((order) => ["paid", "shipped", "completed"].includes(order.payment_status)).length,
+      pendingOrders: orders.filter((order) => !["paid", "shipped", "completed", "cancelled"].includes(order.payment_status)).length,
       revenueCny: orders
-        .filter((order) => order.payment_status === "paid")
+        .filter((order) => ["paid", "shipped", "completed"].includes(order.payment_status))
         .reduce((sum, order) => sum + Number(order.amount_cny || 0), 0),
     },
   };
@@ -148,11 +204,23 @@ module.exports = async function handler(req, res) {
       return sendJson(res, 200, await getAdminData());
     }
 
+    if (payload.action === "update_order_tracking") {
+      const orderNo = cleanText(payload.orderNo, 64);
+      if (!orderNo) {
+        return sendJson(res, 400, { error: "invalid_order_no" });
+      }
+      await patchRows("orders", `order_no=eq.${encodeURIComponent(orderNo)}`, normalizeOrderTracking(payload));
+      return sendJson(res, 200, await getAdminData());
+    }
+
     return sendJson(res, 400, { error: "unknown_action" });
   } catch (error) {
-    return sendJson(res, 500, {
+    return sendJson(res, error.statusCode || 500, {
       error: "admin_data_failed",
-      message: error.message,
+      message:
+        error.message === "supabase_not_configured"
+          ? "本地 Supabase 数据库尚未配置，请在 .env.local 填写 SUPABASE_URL 和 SUPABASE_SERVICE_ROLE_KEY。"
+          : error.message,
     });
   }
 };

@@ -10,19 +10,20 @@
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>订单与物流状态 · Global SIM Help</title>
-    <meta name="description" content="Global SIM Help 订单与物流状态说明，购买 giffgaff 实体 SIM 卡后可通过微信或 QQ 联系客服查询订单、发货和激活协助。" />
-    <meta name="robots" content="index,follow" />
+    <title>订单查询与物流查询 · Global SIM Help</title>
+    <meta name="description" content="使用下单时填写的手机号码查询 giffgaff 实体 SIM 卡订单状态、发货状态、物流单号和物流图片。" />
+    <meta name="robots" content="noindex,follow" />
     <link rel="canonical" href="https://globalsimhelp.com/orders/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Global SIM Help" />
-    <meta property="og:title" content="订单与物流状态" />
-    <meta property="og:description" content="查询 giffgaff 实体 SIM 卡订单、发货进度和激活协助。" />
+    <meta property="og:title" content="订单查询与物流查询" />
+    <meta property="og:description" content="使用手机号查询 giffgaff 实体 SIM 卡订单、物流状态和物流图片。" />
     <meta property="og:url" content="https://globalsimhelp.com/orders/" />
     <meta property="og:image" content="https://globalsimhelp.com/assets/giffgaff-hero.png" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="stylesheet" href="/styles.css?v=20260712c" />
+    <link rel="stylesheet" href="/styles.css?v=20260715d" />
+    <script defer src="/orders/orders.js?v=20260715d"></script>
   </head>
   <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N9NR6JRF" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -33,57 +34,54 @@
           <a href="/guides/giffgaff-activation/">激活教程</a>
           <a href="/tutorials/">教程内容</a>
           <a href="/faq/">常见问题</a>
+          <a href="/orders/" aria-current="page">订单查询</a>
           <a href="/contact/">联系支持</a>
         </nav>
         <div class="nav-actions"><a class="order-button" href="/cart/">立即订购</a></div>
       </div>
     </header>
-    <main class="policy-page">
-      <article class="policy-shell wide-shell">
-        <p class="policy-kicker">Orders</p>
-        <h1>订单与物流状态</h1>
-        <p>提交订单后，请保留你填写的微信或 QQ。客服会根据订单信息与你确认收件地址、发货进度和激活协助事项。如果你需要主动查询，也可以通过下面方式联系。</p>
 
-        <div class="content-grid two-columns">
-          <section>
-            <h2>微信</h2>
-            <p><strong>Han678btc</strong></p>
-            <p>适合订单确认、收货地址核对、发货进度、激活和充值协助。</p>
-          </section>
-          <section>
-            <h2>QQ</h2>
-            <p><strong>1345456518</strong></p>
-            <p>适合不方便使用微信时咨询订单、物流和售后问题。</p>
-          </section>
+    <main class="order-lookup-page">
+      <section class="order-lookup-hero">
+        <div class="home-shell order-lookup-grid">
+          <div>
+            <p class="policy-kicker">Order Tracking</p>
+            <h1>订单查询与物流查询</h1>
+            <p>输入下单时填写的手机号码，即可查询 giffgaff 实体 SIM 卡订单状态、发货状态、物流单号和物流图片。</p>
+          </div>
+
+          <form class="order-lookup-card" data-order-lookup-form>
+            <label>
+              <span>下单手机号</span>
+              <input name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="11" placeholder="请输入 11 位手机号" required />
+            </label>
+            <button type="submit">查询订单</button>
+            <p data-order-lookup-message>仅支持查询使用该手机号提交的订单，不展示完整收货地址。</p>
+          </form>
         </div>
+      </section>
 
-        <h2>查询订单时请提供</h2>
-        <ul>
-          <li>下单时填写的姓名或联系方式。</li>
-          <li>购买的产品：自助卡或省心卡。</li>
-          <li>下单时间和支付截图或付款记录。</li>
-          <li>需要查询的问题：订单确认、物流、激活、充值或售后。</li>
-        </ul>
+      <section class="order-lookup-results-section">
+        <div class="home-shell">
+          <div class="order-lookup-results" data-order-results>
+            <div class="order-empty-state">
+              <h2>输入手机号查询订单</h2>
+              <p>如果刚完成付款，系统同步可能需要几分钟。若查不到订单，请确认手机号是否和下单时一致。</p>
+            </div>
+          </div>
 
-        <h2>订单处理流程</h2>
-        <ol>
-          <li>提交订单：在购物车页面选择产品并填写收件信息。</li>
-          <li>客服确认：客服通过你留下的微信或 QQ 确认订单和支付方式。</li>
-          <li>安排发货：实体 SIM 卡从国内仓库发出，发货后同步物流信息。</li>
-          <li>收卡激活：自助卡按教程操作，省心卡可咨询激活和充值步骤。</li>
-          <li>售后排查：遇到无信号、激活失败、充值问题，可联系协助排查。</li>
-        </ol>
-
-        <h2>需要使用咨询？</h2>
-        <p>如果你还没有下单，但不确定自助卡还是省心卡更适合，可以先说明你的使用场景：英国留学、英国旅游、注册英国手机号、长期保号，客服会按场景给你购买建议。</p>
-
-        <div class="inline-actions">
-          <a href="/cart/">去下单</a>
-          <a href="/guides/giffgaff-activation/">激活教程</a>
-          <a href="/guides/giffgaff-keep-number/">保号教程</a>
-          <a href="/contact/">联系支持</a>
+          <div class="order-support-panel">
+            <div>
+              <h2>查不到订单怎么办？</h2>
+              <p>请提供下单手机号、付款截图或订单号，客服可以人工核对订单和物流进度。</p>
+            </div>
+            <div class="order-support-methods">
+              <span>微信：<strong>Han678btc</strong></span>
+              <span>QQ：<strong>1345456518</strong></span>
+            </div>
+          </div>
         </div>
-      </article>
+      </section>
     </main>
   </body>
 </html>

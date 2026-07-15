@@ -77,8 +77,88 @@ function orderStatusLabel(status) {
   return labels[status] || status || "待处理";
 }
 
+function logisticsStatusLabel(status) {
+  const labels = {
+    pending: "待处理",
+    preparing: "备货中",
+    shipped: "已发货",
+    delivered: "已签收",
+    exception: "物流异常",
+  };
+  return labels[status] || status || "待更新";
+}
+
+function readImageDimensions(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("图片读取失败，请重新选择。"));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error("图片格式无法识别，请上传 JPG、PNG 或 WebP。"));
+      image.onload = () => resolve(image);
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function compressLogisticsImage(file) {
+  if (!file) {
+    return "";
+  }
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error("请上传物流图片文件。");
+  }
+
+  if (file.size > 8 * 1024 * 1024) {
+    throw new Error("图片不能超过 8MB，请先裁剪或压缩后再上传。");
+  }
+
+  const image = await readImageDimensions(file);
+  const maxSize = 1200;
+  const ratio = Math.min(1, maxSize / Math.max(image.width, image.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.width * ratio));
+  canvas.height = Math.max(1, Math.round(image.height * ratio));
+
+  const context = canvas.getContext("2d");
+  context.fillStyle = "#fff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  const qualities = [0.78, 0.68, 0.58, 0.48];
+  let dataUrl = "";
+  for (const quality of qualities) {
+    dataUrl = canvas.toDataURL("image/jpeg", quality);
+    if (dataUrl.length <= 1_150_000) {
+      return dataUrl;
+    }
+  }
+
+  throw new Error("图片压缩后仍然过大，请换一张更小的物流截图。");
+}
+
 function statusClass(status) {
   return `status-pill status-${escapeHtml(status || "pending")}`;
+}
+
+function setTrackingImagePreview(orderNo, file) {
+  const block = document.querySelector(`[data-tracking-dropzone="${CSS.escape(orderNo)}"]`);
+  if (!block || !file) {
+    return;
+  }
+
+  const url = URL.createObjectURL(file);
+  block.innerHTML = `<img src="${url}" alt="待上传物流图片">`;
+  const image = block.querySelector("img");
+  image.addEventListener(
+    "load",
+    () => {
+      URL.revokeObjectURL(url);
+    },
+    { once: true },
+  );
 }
 
 function cloneProducts(products = []) {
@@ -167,6 +247,42 @@ function renderOrdersTable(selector, orders, compact = false) {
                   .join("")}
               </select>
               <button type="button" data-save-order-status="${escapeHtml(order.order_no)}">更新状态</button>
+              <div class="tracking-editor">
+                <label>
+                  <span>物流状态</span>
+                  <select data-tracking-status="${escapeHtml(order.order_no)}">
+                    ${["pending", "preparing", "shipped", "delivered", "exception"]
+                      .map(
+                        (item) =>
+                          `<option value="${item}" ${item === (order.logistics_status || "pending") ? "selected" : ""}>${logisticsStatusLabel(item)}</option>`,
+                      )
+                      .join("")}
+                  </select>
+                </label>
+                <div class="tracking-image-block" data-tracking-dropzone="${escapeHtml(order.order_no)}" tabindex="0" role="button" aria-label="拖拽物流图片到这里上传">
+                  ${
+                    order.logistics_image_data
+                      ? `<img src="${escapeHtml(order.logistics_image_data)}" alt="当前物流图片">`
+                      : '<span class="muted-text">暂无物流图片<br><small>可直接拖拽图片到这里</small></span>'
+                  }
+                </div>
+                <label>
+                  <span>物流图片</span>
+                  <input data-tracking-image="${escapeHtml(order.order_no)}" type="file" accept="image/png,image/jpeg,image/webp,image/*">
+                </label>
+                ${
+                  order.logistics_image_data
+                    ? `
+                      <label class="tracking-clear-image">
+                        <input data-tracking-image-clear="${escapeHtml(order.order_no)}" type="checkbox">
+                        <span>清除当前物流图片</span>
+                      </label>
+                    `
+                    : ""
+                }
+                <button type="button" data-save-order-tracking="${escapeHtml(order.order_no)}">保存物流</button>
+                <p class="tracking-message" data-tracking-message="${escapeHtml(order.order_no)}" aria-live="polite"></p>
+              </div>
             </div>
           </td>
         </tr>
@@ -384,9 +500,14 @@ function renderAll(data) {
 
 async function loadAdminData() {
   showNotice("正在读取数据库...");
-  const data = await api("/api/admin-data/");
-  renderAll(data);
-  showNotice("");
+  try {
+    const data = await api("/api/admin-data/");
+    renderAll(data);
+    showNotice("");
+  } catch (error) {
+    showNotice(error.message || "数据库读取失败，请检查本地 Supabase 环境变量。", "error");
+    throw error;
+  }
 }
 
 function collectProducts() {
@@ -491,6 +612,78 @@ async function updateOrderStatus(orderNo) {
   showNotice("订单状态已更新。");
 }
 
+async function updateOrderTracking(orderNo) {
+  const saveButton = document.querySelector(`[data-save-order-tracking="${CSS.escape(orderNo)}"]`);
+  const localMessage = document.querySelector(`[data-tracking-message="${CSS.escape(orderNo)}"]`);
+  const status = document.querySelector(`[data-tracking-status="${CSS.escape(orderNo)}"]`);
+  const imageInput = document.querySelector(`[data-tracking-image="${CSS.escape(orderNo)}"]`);
+  const clearImage = document.querySelector(`[data-tracking-image-clear="${CSS.escape(orderNo)}"]`);
+  if (!status) {
+    return;
+  }
+
+  const originalButtonText = saveButton?.textContent || "保存物流";
+
+  try {
+    if (saveButton) {
+      saveButton.disabled = true;
+      saveButton.textContent = "正在保存...";
+    }
+    if (localMessage) {
+      localMessage.dataset.type = "info";
+      localMessage.textContent = "正在保存物流信息...";
+    }
+
+    const payload = {
+      action: "update_order_tracking",
+      orderNo,
+      logisticsStatus: status.value,
+    };
+
+    if (clearImage?.checked) {
+      payload.clearLogisticsImage = true;
+    }
+
+    if (imageInput?.files?.[0]) {
+      showNotice("正在压缩物流图片...");
+      if (localMessage) {
+        localMessage.dataset.type = "info";
+        localMessage.textContent = "正在压缩物流图片...";
+      }
+      payload.logisticsImageData = await compressLogisticsImage(imageInput.files[0]);
+      payload.clearLogisticsImage = false;
+    }
+
+    showNotice("正在保存物流信息...");
+    const data = await api("/api/admin-data/", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    renderAll(data);
+    showNotice("物流信息已保存，用户可在前台按手机号查询。");
+    const refreshedMessage = document.querySelector(`[data-tracking-message="${CSS.escape(orderNo)}"]`);
+    if (refreshedMessage) {
+      refreshedMessage.dataset.type = "success";
+      refreshedMessage.textContent = "保存成功，用户现在可以在订单查询页看到最新物流状态。";
+    }
+  } catch (error) {
+    const message = error.message?.includes("logistics_status")
+      ? "数据库还没有物流字段。请先在 Supabase SQL Editor 执行 supabase/order_tracking_fields.sql。"
+      : error.message || "物流保存失败。";
+    showNotice(message, "error");
+    if (localMessage) {
+      localMessage.dataset.type = "error";
+      localMessage.textContent = message;
+    }
+    window.alert(message);
+  } finally {
+    if (saveButton) {
+      saveButton.disabled = false;
+      saveButton.textContent = originalButtonText;
+    }
+  }
+}
+
 async function checkSession() {
   const session = await api("/api/admin-session/");
   setAuthenticated(Boolean(session.authenticated));
@@ -512,6 +705,8 @@ document.addEventListener("click", async (event) => {
   const refreshButton = event.target.closest("[data-refresh]");
   const logoutButton = event.target.closest("[data-logout]");
   const orderStatusButton = event.target.closest("[data-save-order-status]");
+  const orderTrackingButton = event.target.closest("[data-save-order-tracking]");
+  const trackingDropzone = event.target.closest("[data-tracking-dropzone]");
 
   try {
     if (tabButton) {
@@ -572,6 +767,15 @@ document.addEventListener("click", async (event) => {
     if (orderStatusButton) {
       await updateOrderStatus(orderStatusButton.dataset.saveOrderStatus);
     }
+
+    if (orderTrackingButton) {
+      await updateOrderTracking(orderTrackingButton.dataset.saveOrderTracking);
+    }
+
+    if (trackingDropzone) {
+      const imageInput = document.querySelector(`[data-tracking-image="${CSS.escape(trackingDropzone.dataset.trackingDropzone)}"]`);
+      imageInput?.click();
+    }
   } catch (error) {
     showNotice(error.message || "操作失败，请稍后再试。", "error");
   }
@@ -595,10 +799,64 @@ document.addEventListener("change", (event) => {
     renderProductCatalog();
   }
 
+  if (event.target.matches("[data-tracking-image]")) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setTrackingImagePreview(event.target.dataset.trackingImage, file);
+    }
+  }
+
   if (event.target.closest("[data-product-edit-form]")) {
     syncSelectedProductFromEditor();
     renderProductCatalog();
   }
+});
+
+document.addEventListener("dragover", (event) => {
+  const dropzone = event.target.closest("[data-tracking-dropzone]");
+  if (!dropzone) {
+    return;
+  }
+
+  event.preventDefault();
+  dropzone.classList.add("dragging");
+});
+
+document.addEventListener("dragleave", (event) => {
+  const dropzone = event.target.closest("[data-tracking-dropzone]");
+  if (!dropzone || dropzone.contains(event.relatedTarget)) {
+    return;
+  }
+
+  dropzone.classList.remove("dragging");
+});
+
+document.addEventListener("drop", (event) => {
+  const dropzone = event.target.closest("[data-tracking-dropzone]");
+  if (!dropzone) {
+    return;
+  }
+
+  event.preventDefault();
+  dropzone.classList.remove("dragging");
+
+  const file = [...(event.dataTransfer?.files || [])].find((item) => item.type.startsWith("image/"));
+  if (!file) {
+    showNotice("请拖入图片文件。", "error");
+    return;
+  }
+
+  const orderNo = dropzone.dataset.trackingDropzone;
+  const imageInput = document.querySelector(`[data-tracking-image="${CSS.escape(orderNo)}"]`);
+  if (!imageInput) {
+    return;
+  }
+
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+  imageInput.files = transfer.files;
+  setTrackingImagePreview(orderNo, file);
+  showNotice("物流图片已导入，点击“保存物流”后生效。");
 });
 
 document.querySelector("[data-login-form]").addEventListener("submit", async (event) => {
@@ -617,6 +875,9 @@ document.querySelector("[data-login-form]").addEventListener("submit", async (ev
     await loadAdminData();
   } catch (error) {
     message.textContent = error.message || "登录失败。";
+    if (adminApp && !adminApp.hidden) {
+      showNotice(error.message || "数据库读取失败，请检查本地 Supabase 环境变量。", "error");
+    }
   }
 });
 
