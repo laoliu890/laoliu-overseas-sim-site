@@ -30,9 +30,23 @@ function formatMoney(value) {
   return `¥${Number(value || 0).toLocaleString("zh-CN", { maximumFractionDigits: 2 })}`;
 }
 
+function trackingLink(order) {
+  const company = String(order.logisticsCompany || "").trim();
+  const number = String(order.logisticsNo || "").trim();
+  if (!number) {
+    return "-";
+  }
+
+  const encodedNumber = encodeURIComponent(number);
+  if (company.includes("申通")) {
+    return `<a href="https://www.sto.cn/pc/service/query.html?num=${encodedNumber}" target="_blank" rel="noreferrer">${escapeHtml(number)}</a>`;
+  }
+  return escapeHtml(number);
+}
+
 function renderOrder(order) {
   const items = Array.isArray(order.items) ? order.items : [];
-  const logisticsReady = order.logisticsStatus || order.logisticsImageData;
+  const logisticsReady = order.logisticsStatus || order.logisticsCompany || order.logisticsNo || order.logisticsImageData;
   const logisticsImage = order.logisticsImageData
     ? `
       <figure class="logistics-image">
@@ -71,10 +85,12 @@ function renderOrder(order) {
       <div class="logistics-box ${logisticsReady ? "" : "is-empty"}">
         <h3>物流信息</h3>
         <dl>
+          <div><dt>快递公司</dt><dd>${escapeHtml(order.logisticsCompany || "-")}</dd></div>
+          <div><dt>快递单号</dt><dd>${trackingLink(order)}</dd></div>
           <div><dt>物流状态</dt><dd>${escapeHtml(order.logisticsStatusLabel || "待更新")}</dd></div>
           <div><dt>更新时间</dt><dd>${formatDate(order.logisticsUpdatedAt || order.logisticsImageUpdatedAt || order.shippedAt)}</dd></div>
         </dl>
-        <p>${order.logisticsImageData ? "物流图片如下，请以图片中的快递信息为准。" : "客服上传物流图片后，你可以在这里查看发货凭证。"}</p>
+        <p>${order.logisticsNo ? "可点击快递单号前往快递公司官网查询最新进度。" : order.logisticsImageData ? "物流图片如下，请以图片中的快递信息为准。" : "客服更新物流后，你可以在这里查看发货信息。"}</p>
         ${logisticsImage}
       </div>
     </article>

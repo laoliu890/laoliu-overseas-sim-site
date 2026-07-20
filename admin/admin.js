@@ -249,6 +249,14 @@ function renderOrdersTable(selector, orders, compact = false) {
               <button type="button" data-save-order-status="${escapeHtml(order.order_no)}">更新状态</button>
               <div class="tracking-editor">
                 <label>
+                  <span>快递公司</span>
+                  <input data-tracking-company="${escapeHtml(order.order_no)}" type="text" maxlength="80" value="${escapeHtml(order.logistics_company || "")}" placeholder="例如：申通快递">
+                </label>
+                <label>
+                  <span>快递单号</span>
+                  <input data-tracking-no="${escapeHtml(order.order_no)}" type="text" maxlength="80" value="${escapeHtml(order.logistics_no || "")}" placeholder="请输入快递单号">
+                </label>
+                <label>
                   <span>物流状态</span>
                   <select data-tracking-status="${escapeHtml(order.order_no)}">
                     ${["pending", "preparing", "shipped", "delivered", "exception"]
@@ -615,6 +623,8 @@ async function updateOrderStatus(orderNo) {
 async function updateOrderTracking(orderNo) {
   const saveButton = document.querySelector(`[data-save-order-tracking="${CSS.escape(orderNo)}"]`);
   const localMessage = document.querySelector(`[data-tracking-message="${CSS.escape(orderNo)}"]`);
+  const company = document.querySelector(`[data-tracking-company="${CSS.escape(orderNo)}"]`);
+  const trackingNo = document.querySelector(`[data-tracking-no="${CSS.escape(orderNo)}"]`);
   const status = document.querySelector(`[data-tracking-status="${CSS.escape(orderNo)}"]`);
   const imageInput = document.querySelector(`[data-tracking-image="${CSS.escape(orderNo)}"]`);
   const clearImage = document.querySelector(`[data-tracking-image-clear="${CSS.escape(orderNo)}"]`);
@@ -637,6 +647,8 @@ async function updateOrderTracking(orderNo) {
     const payload = {
       action: "update_order_tracking",
       orderNo,
+      logisticsCompany: company?.value || "",
+      logisticsNo: trackingNo?.value || "",
       logisticsStatus: status.value,
     };
 
